@@ -33,6 +33,18 @@ public class RequestClass implements Serializable {
         return requestSum;
     }
 
+    public String getRequestYear() {
+        return requestYear;
+    }
+
+    public String getRequestMonth() {
+        return requestMonth;
+    }
+
+    public String getRequestDay() {
+        return requestDay;
+    }
+
     @Override
     public String toString() {
         return "RequestClass{" +
