@@ -77,6 +77,10 @@ public class ClientRequest {
         return title;
     }
 
+    public String getDate() {
+        return date;
+    }
+
     public Integer getSum() {
         return sum;
     }

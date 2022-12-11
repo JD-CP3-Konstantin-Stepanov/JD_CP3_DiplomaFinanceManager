@@ -22,6 +22,26 @@ public class Main {
             Map<String, String> categoriesMap = readCategories();
             Map<String, Object> mapSumGson = new LinkedHashMap<>();
 
+            RequestClass requestClass;
+            Collection<RequestClass> requestCollect = new ArrayList<>();
+            RequestCollection requestCollection;
+
+            File binFile = new File("RequestCollection.bin");
+            if (binFile.exists()) {
+                requestCollection = RequestCollection.loadFromBinFile(binFile);
+                Collection<RequestClass> requestList = requestCollection.getRequestCollection();
+
+                for (RequestClass rq : requestList) {
+                    ClientRequest clientRequest = new ClientRequest(rq.getRequestTitle(), rq.getRequestDate(),
+                            rq.getRequestSum());
+                    mapSumForm(clientRequest, mapSum, categoriesMap);
+                    requestClass = requestClassInit(clientRequest);
+                    requestCollection = RequestCollectionInit(requestClass, requestCollect);
+                }
+                System.out.println(mapSum);
+                System.out.println(requestCollection);
+            }
+
             while (true) {
                 try (Socket client_srv = server.accept();
                      PrintWriter writer = new PrintWriter(client_srv.getOutputStream(), true);
@@ -35,6 +55,11 @@ public class Main {
 
                     File jsonFile = new File(jsonFilePath);
                     ClientRequest clientRequest = processClientRequest(jsonFile);
+
+                    requestClass = requestClassInit(clientRequest);
+                    requestCollection = RequestCollectionInit(requestClass, requestCollect);
+                    System.out.println(requestCollection);
+                    requestCollection.saveBin(binFile);
                     mapSumForm(clientRequest, mapSum, categoriesMap);
 
                     //Формирование maxCategory
@@ -117,6 +142,19 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static RequestClass requestClassInit(ClientRequest clientRequest) {
+        String[] date = clientRequest.getDate().split("\\.");
+
+        return new RequestClass(clientRequest.getTitle(), clientRequest.getDate(), clientRequest.getSum(),
+                date[0], date[1], date[2]);
+    }
+
+    private static RequestCollection RequestCollectionInit(RequestClass requestClass,
+                                                           Collection<RequestClass> requestCollect) {
+        requestCollect.add(requestClass);
+        return new RequestCollection(requestCollect);
     }
 
 }
