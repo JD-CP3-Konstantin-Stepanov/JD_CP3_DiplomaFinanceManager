@@ -1,0 +1,7 @@
+#файлы idea
+*.iml
+.idea/
+#автогенерируемые результаты сборки idea
+out/
+target/
+build/
