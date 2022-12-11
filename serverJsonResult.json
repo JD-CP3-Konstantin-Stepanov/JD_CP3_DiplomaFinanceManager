@@ -1,6 +1,18 @@
 {
   "maxCategory": {
+    "category": "финансы",
+    "sum": 2200
+  },
+  "maxYearCategory": {
+    "category": "финансы",
+    "sum": 700
+  },
+  "maxMonthCategory": {
     "category": "другое",
-    "sum": 200
+    "sum": 500
+  },
+  "maxDayCategory": {
+    "category": "быт",
+    "sum": 600
   }
 }

@@ -65,6 +65,18 @@ public class Main {
                     //Формирование maxCategory
                     MaxCategory maxCategory = maxCategorySearch(mapSum);
                     mapSumGson.put("maxCategory", maxCategory);
+                    //Формирование maxYearCategory
+                    maxYearCategory maxYearCategory = UtilClasses.maxYearCategory
+                            .maxYearCategorySearch(requestCollection, categoriesMap);
+                    mapSumGson.put("maxYearCategory", maxYearCategory);
+                    //Формирование maxMonthCategory
+                    maxMonthCategory maxMonthCategory = UtilClasses.maxMonthCategory
+                            .maxMonthCategorySearch(requestCollection, categoriesMap);
+                    mapSumGson.put("maxMonthCategory", maxMonthCategory);
+                    //Формирование maxDayCategory
+                    maxDayCategory maxDayCategory = UtilClasses.maxDayCategory
+                            .maxDayCategorySearch(requestCollection, categoriesMap);
+                    mapSumGson.put("maxDayCategory", maxDayCategory);
 
                     //Вывод результата работы сервера в Json
                     jsonServerResult(mapSumGson);
@@ -119,6 +131,14 @@ public class Main {
             return "другое";
         } else {
             return categoriesMap.get(request.getTitle());
+        }
+    }
+
+    public static String titleSearchMaxCategories(RequestClass requestClass, Map<String, String> categoriesMap) {
+        if (categoriesMap.get(requestClass.getRequestTitle()) == null) {
+            return "другое";
+        } else {
+            return categoriesMap.get(requestClass.getRequestTitle());
         }
     }
 
