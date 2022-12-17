@@ -28,8 +28,6 @@ public class ClientRequest {
             String serverMessage = reader.readLine();
             System.out.println(serverMessage);
 
-            File jsonFile = new File("clientRequest.json");
-
             System.out.println("Введите название продукта:");
             String title_in = scanner.nextLine();
 
@@ -47,10 +45,13 @@ public class ClientRequest {
             }
 
             System.out.println("Введите цену покупки:");
-            Integer sum_in = Integer.parseInt(scanner.nextLine());
+            int sum_in;
+            try {sum_in = Integer.parseInt(scanner.nextLine());
+            } catch (Exception e)
+            {throw new RuntimeException("Некорректное значение цены покупки!");}
 
-            formatJson(jsonFile, title_in, date_in, sum_in);
-            writer.println(jsonFile);
+            String jsonRequest = formatJson(title_in, date_in, sum_in);
+            writer.println(jsonRequest);
             writer.flush();
 
         } catch (IOException ex) {
@@ -59,18 +60,11 @@ public class ClientRequest {
 
     }
 
-    public static void formatJson(File jsonFile, String title, String date, Integer sum) {
+    public static String formatJson(String title, String date, Integer sum) {
         ClientRequest gsonClientRequest = new ClientRequest(title, date, sum);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
-        gson.toJson(gsonClientRequest);
-
-        try (FileWriter file = new FileWriter(jsonFile)) {
-            file.write(gson.toJson(gsonClientRequest));
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return gson.toJson(gsonClientRequest);
     }
 
     public String getTitle() {

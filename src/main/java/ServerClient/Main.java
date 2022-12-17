@@ -48,13 +48,19 @@ public class Main {
                      BufferedReader reader = new BufferedReader(new InputStreamReader(client_srv.getInputStream()))) {
 
                     writer.println("New connection accepted!");
-                    String jsonFilePath = reader.readLine();
-                    if (jsonFilePath == null) {
+
+                    String res;
+                    StringBuilder jsonRequest = new StringBuilder();
+                    while((res = reader.readLine()) != null){
+                        jsonRequest.append(res.trim());
+                    }
+
+                    System.out.println(jsonRequest);
+                    if (jsonRequest.toString().equals("")) {
                         continue;
                     }
 
-                    File jsonFile = new File(jsonFilePath);
-                    ClientRequest clientRequest = processClientRequest(jsonFile);
+                    ClientRequest clientRequest = processClientRequest(jsonRequest.toString());
 
                     requestClass = requestClassInit(clientRequest);
                     requestCollection = RequestCollectionInit(requestClass, requestCollect);
@@ -106,11 +112,11 @@ public class Main {
         return map;
     }
 
-    private static ClientRequest processClientRequest(File jsonFile) {
+    private static ClientRequest processClientRequest(String jsonFile) {
         JSONParser parser = new JSONParser();
-        ClientRequest clientRequest = null;
+        ClientRequest clientRequest;
         try {
-            Object obj = parser.parse(new FileReader(jsonFile));
+            Object obj = parser.parse(jsonFile);
             JSONObject ParsedJson = (JSONObject) obj;
 
             String titleJson = (String) ParsedJson.get("title");
@@ -118,8 +124,6 @@ public class Main {
             Integer sumJson = Integer.valueOf(ParsedJson.get("sum").toString());
 
             clientRequest = new ClientRequest(titleJson, dateJson, sumJson);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (org.json.simple.parser.ParseException e) {
             throw new RuntimeException(e);
         }
