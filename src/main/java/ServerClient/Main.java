@@ -38,8 +38,10 @@ public class Main {
                     requestClass = requestClassInit(clientRequest);
                     requestCollection = RequestCollectionInit(requestClass, requestCollect);
                 }
-                System.out.println(mapSum);
-                System.out.println(requestCollection);
+                //DEBUG
+                //System.out.println("TOTAL SUM: " + mapSum);
+                //System.out.println("LIST: " + requestCollection);
+                //DEBUG
             }
 
             while (true) {
@@ -55,7 +57,6 @@ public class Main {
                         jsonRequest.append(res.trim());
                     }
 
-                    System.out.println(jsonRequest);
                     if (jsonRequest.toString().equals("")) {
                         continue;
                     }
@@ -64,10 +65,14 @@ public class Main {
 
                     requestClass = requestClassInit(clientRequest);
                     requestCollection = RequestCollectionInit(requestClass, requestCollect);
-                    System.out.println(requestCollection);
+
                     requestCollection.saveBin(binFile);
                     mapSumForm(clientRequest, mapSum, categoriesMap);
-
+                    //DEBUG
+                    //System.out.println("LIST: " + requestCollection);
+                    //System.out.println("---------------------------------------------------------------------------");
+                    //System.out.println("TOTAL SUM: " + mapSum);
+                    //DEBUG
                     //Формирование maxCategory
                     MaxCategory maxCategory = maxCategorySearch(mapSum);
                     mapSumGson.put("maxCategory", maxCategory);
@@ -157,15 +162,9 @@ public class Main {
 
     public static void jsonServerResult(Map<String, Object> categoriesMap) {
         GsonBuilder builder = new GsonBuilder();
+        System.out.println("---------------------------------------------------------------------------");
         Gson gson = builder.setPrettyPrinting().create();
-
-        File serverJsonResult = new File("serverJsonResult.json");
-        try (FileWriter file = new FileWriter(serverJsonResult)) {
-            file.write(gson.toJson(categoriesMap));
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(gson.toJson(categoriesMap));
     }
 
     private static RequestClass requestClassInit(ClientRequest clientRequest) {
