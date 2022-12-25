@@ -39,7 +39,7 @@ public class Main {
                     requestCollection = RequestCollectionInit(requestClass, requestCollect);
                 }
                 //DEBUG
-                //System.out.println("TOTAL SUM: " + mapSum);
+                System.out.println("TOTAL SUM: " + mapSum);
                 //System.out.println("LIST: " + requestCollection);
                 //DEBUG
             }
@@ -50,18 +50,20 @@ public class Main {
                      BufferedReader reader = new BufferedReader(new InputStreamReader(client_srv.getInputStream()))) {
 
                     writer.println("New connection accepted!");
+                    writer.flush();
 
-                    String res;
-                    StringBuilder jsonRequest = new StringBuilder();
-                    while((res = reader.readLine()) != null){
-                        jsonRequest.append(res.trim());
-                    }
-
-                    if (jsonRequest.toString().equals("")) {
+                    String jsonRequest = reader.readLine();
+                    if (jsonRequest == null || jsonRequest.equals("")) {
                         continue;
+                    } else {
+                        jsonRequest = jsonRequest.replace("\t", "\n");
+                        System.out.println("-------------------------------------------------------------------------");
+                        System.out.println("Client request:");
+                        System.out.println(jsonRequest);
+                        System.out.println("-------------------------------------------------------------------------");
                     }
 
-                    ClientRequest clientRequest = processClientRequest(jsonRequest.toString());
+                    ClientRequest clientRequest = processClientRequest(jsonRequest);
 
                     requestClass = requestClassInit(clientRequest);
                     requestCollection = RequestCollectionInit(requestClass, requestCollect);
@@ -70,7 +72,6 @@ public class Main {
                     mapSumForm(clientRequest, mapSum, categoriesMap);
                     //DEBUG
                     //System.out.println("LIST: " + requestCollection);
-                    //System.out.println("---------------------------------------------------------------------------");
                     //System.out.println("TOTAL SUM: " + mapSum);
                     //DEBUG
                     //Формирование maxCategory
@@ -90,7 +91,8 @@ public class Main {
                     mapSumGson.put("maxDayCategory", maxDayCategory);
 
                     //Вывод результата работы сервера в Json
-                    jsonServerResult(mapSumGson);
+                    writer.print(jsonServerResult(mapSumGson));
+                    writer.flush();
                 }
             }
         } catch (IOException e) {
@@ -160,11 +162,10 @@ public class Main {
         }
     }
 
-    public static void jsonServerResult(Map<String, Object> categoriesMap) {
+    public static String jsonServerResult(Map<String, Object> categoriesMap) {
         GsonBuilder builder = new GsonBuilder();
-        System.out.println("---------------------------------------------------------------------------");
         Gson gson = builder.setPrettyPrinting().create();
-        System.out.println(gson.toJson(categoriesMap));
+        return gson.toJson(categoriesMap);
     }
 
     private static RequestClass requestClassInit(ClientRequest clientRequest) {
