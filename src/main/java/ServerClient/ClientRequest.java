@@ -25,8 +25,7 @@ public class ClientRequest {
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              Scanner scanner = new Scanner(System.in)) {
 
-            String serverMessage = reader.readLine();
-            System.out.println(serverMessage);
+            System.out.println(reader.readLine());
 
             System.out.println("Введите название продукта:");
             String title_in = scanner.nextLine();
@@ -51,8 +50,18 @@ public class ClientRequest {
             {throw new RuntimeException("Некорректное значение цены покупки!");}
 
             String jsonRequest = formatJson(title_in, date_in, sum_in);
+            jsonRequest = jsonRequest.replace("\n", "\t");
             writer.println(jsonRequest);
             writer.flush();
+
+            int character;
+            StringBuilder jsonAnswer = new StringBuilder();
+            while((character = reader.read()) != -1) {
+                jsonAnswer.append((char) character);
+            }
+            System.out.println("---------------------------------------------------------------------------");
+            System.out.println(jsonAnswer);
+            System.out.println("---------------------------------------------------------------------------");
 
         } catch (IOException ex) {
             throw new RuntimeException(ex);
