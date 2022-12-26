@@ -28,11 +28,11 @@ public class ClientRequest {
             System.out.println(reader.readLine());
 
             System.out.println("Введите название продукта:");
-            String title_in = scanner.nextLine();
+            String titleIn = scanner.nextLine();
 
             System.out.println("Введите дату покупки в формате ГОД.МЕСЯЦ.ДЕНЬ:");
-            String date_in = scanner.nextLine();
-            String[] dateArray = date_in.split("\\.");
+            String dateIn = scanner.nextLine();
+            String[] dateArray = dateIn.split("\\.");
             if (dateArray.length != 3) {
                 throw new RuntimeException("Необходимо ввести дату в формате ГОД.МЕСЯЦ.ДЕНЬ!");
             } else if (dateArray[0].length() != 4) {
@@ -44,19 +44,21 @@ public class ClientRequest {
             }
 
             System.out.println("Введите цену покупки:");
-            int sum_in;
-            try {sum_in = Integer.parseInt(scanner.nextLine());
-            } catch (Exception e)
-            {throw new RuntimeException("Некорректное значение цены покупки!");}
+            int sumIn;
+            try {
+                sumIn = Integer.parseInt(scanner.nextLine());
+            } catch (Exception e) {
+                throw new RuntimeException("Некорректное значение цены покупки!");
+            }
 
-            String jsonRequest = formatJson(title_in, date_in, sum_in);
+            String jsonRequest = formatJson(titleIn, dateIn, sumIn);
             jsonRequest = jsonRequest.replace("\n", "\t");
             writer.println(jsonRequest);
             writer.flush();
 
             int character;
             StringBuilder jsonAnswer = new StringBuilder();
-            while((character = reader.read()) != -1) {
+            while ((character = reader.read()) != -1) {
                 jsonAnswer.append((char) character);
             }
             System.out.println("---------------------------------------------------------------------------");

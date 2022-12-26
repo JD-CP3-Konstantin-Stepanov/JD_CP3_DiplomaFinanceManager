@@ -2,7 +2,7 @@ package UtilClasses;
 
 import java.util.*;
 
-import static ServerClient.Main.titleSearchMaxCategories;
+import static ServerUtils.ClientRequestProcess.titleSearchMaxCategories;
 
 public class maxDayCategory {
     String category;

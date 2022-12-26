@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static ServerClient.Main.*;
+import static ServerUtils.ClientRequestProcess.mapSumForm;
+import static ServerUtils.ReadCategories.readCategories;
 import static UtilClasses.MaxCategory.maxCategorySearch;
 
 public class UnitTest {
